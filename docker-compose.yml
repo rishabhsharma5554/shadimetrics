@@ -1,14 +1,90 @@
+version: '3.8'
+
 services:
-  shaadimetrics:
-    build: .
+  # Main Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: shaadi-metrics-app
     image: shaadimetrics-website:latest
     ports:
       - "8080:8080"
+    environment:
+      # Database Configuration
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/shaadimetrics
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ShaadiMetrics@2026
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+
+      # Admin Credentials
+      APP_SEED_ADMIN_USERNAME: admin
+      APP_SEED_ADMIN_PASSWORD: ShaadiAdmin@2026
+
+      # Server Configuration
+      SERVER_PORT: 8080
+    depends_on:
+      mysql:
+        condition: service_healthy
     volumes:
       - ./data:/app/data
       - ./uploads:/app/uploads
-    environment:
-      # Change these before first run in any real deployment.
-      - APP_SEED_ADMIN_USERNAME=admin
-      - APP_SEED_ADMIN_PASSWORD=ShaadiAdmin@2026
+    networks:
+      - shaadi-metrics-net
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: shaadi-metrics-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ShaadiMetrics@2026
+      MYSQL_DATABASE: shaadimetrics
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - shaadi-metrics-net
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    command:
+      - --default-authentication-plugin=mysql_native_password
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+
+  # phpMyAdmin (Optional - for database management)
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: shaadi-metrics-phpmyadmin
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: ShaadiMetrics@2026
+    ports:
+      - "8081:80"
+    depends_on:
+      - mysql
+    networks:
+      - shaadi-metrics-net
+    profiles:
+      - debug
+
+volumes:
+  mysql-data:
+    driver: local
+
+networks:
+  shaadi-metrics-net:
+    driver: bridge
