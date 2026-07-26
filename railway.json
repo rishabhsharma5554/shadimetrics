@@ -5,7 +5,7 @@
     "buildCommand": "chmod +x ./gradlew && ./gradlew clean build -x check -x test"
   },
   "deploy": {
-    "startCommand": "java -jar build/libs/website-*-SNAPSHOT.jar",
+    "startCommand": "java -jar -Dspring.profiles.active=production $(ls build/libs/*.jar | grep -v plain)",
     "restartPolicyType": "on_failure",
     "restartPolicyMaxRetries": 5,
     "healthchecks": {
