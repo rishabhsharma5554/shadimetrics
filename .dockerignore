@@ -1,0 +1,9 @@
+.gradle/
+build/
+data/
+uploads/
+.idea/
+.vscode/
+*.iml
+HELP.md
+scratch-gallery-map.json
