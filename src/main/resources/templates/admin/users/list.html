@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/fragments/head :: head('Users & Roles')}"></head>
+<body class="admin-body">
+
+<aside th:replace="~{admin/fragments/sidebar :: sidebar('users')}"></aside>
+
+<main class="admin-main">
+    <div class="admin-topbar"><h1>Users &amp; Roles</h1></div>
+
+    <div class="admin-content">
+        <div class="flash flash-success" th:if="${success}" th:text="${success}"></div>
+        <div class="flash flash-error" th:if="${error}" th:text="${error}"></div>
+
+        <div class="admin-card">
+            <h3 style="margin-bottom:18px;" th:text="${editing != null} ? 'Edit User' : 'Add Team Member'">Add Team Member</h3>
+            <form th:action="${editing != null} ? @{/admin/users/{id}(id=${editing.id})} : @{/admin/users}" method="post">
+                <div class="form-grid">
+                    <div class="admin-field" th:if="${editing == null}">
+                        <label>Username</label>
+                        <input type="text" name="username" required autocomplete="off" />
+                    </div>
+                    <div class="admin-field">
+                        <label>Full Name</label>
+                        <input type="text" name="fullName" required th:value="${editing?.fullName}" />
+                    </div>
+                    <div class="admin-field">
+                        <label>Email (optional)</label>
+                        <input type="email" name="email" th:value="${editing?.email}" />
+                    </div>
+                    <div class="admin-field">
+                        <label th:text="${editing != null} ? 'New Password (leave blank to keep current)' : 'Password'">Password</label>
+                        <input type="password" name="password" th:required="${editing == null}" autocomplete="new-password" />
+                    </div>
+                    <div class="admin-field full">
+                        <label>Roles</label>
+                        <div style="display:flex; gap:20px; flex-wrap:wrap; padding-top:6px;">
+                            <label style="display:flex; align-items:center; gap:8px; font-weight:400;" th:each="r : ${allRoles}">
+                                <input type="checkbox" name="roles" th:value="${r}"
+                                       th:checked="${editing != null and #sets.contains(editing.roles, r)}" />
+                                <span th:text="${r}">ROLE</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="admin-field checkbox full" th:if="${editing != null}">
+                        <input type="checkbox" name="enabled" value="true" th:checked="${editing.enabled}" />
+                        <label style="margin:0;">Account enabled</label>
+                    </div>
+                </div>
+                <div style="display:flex; gap:12px; margin-top:20px;">
+                    <button type="submit" class="btn btn-gold" th:text="${editing != null} ? 'Save Changes' : 'Create User'">Save</button>
+                    <a th:if="${editing != null}" th:href="@{/admin/users}" class="btn btn-outline-dark">Cancel</a>
+                </div>
+            </form>
+        </div>
+
+        <div class="admin-card">
+            <table class="admin-table">
+                <thead><tr><th>Username</th><th>Full Name</th><th>Roles</th><th>Status</th><th></th></tr></thead>
+                <tbody>
+                <tr th:each="u : ${users}">
+                    <td th:text="${u.username}">username</td>
+                    <td th:text="${u.fullName}">Name</td>
+                    <td>
+                        <span class="badge badge-gold" style="margin-right:4px;" th:each="r : ${u.roles}" th:text="${r}">ROLE</span>
+                    </td>
+                    <td><span th:class="${u.enabled} ? 'badge badge-green' : 'badge badge-red'" th:text="${u.enabled} ? 'Enabled' : 'Disabled'"></span></td>
+                    <td style="display:flex; gap:8px;">
+                        <a th:href="@{/admin/users/{id}/edit(id=${u.id})}" class="btn-sm btn-sm-ghost">Edit</a>
+                        <form th:action="@{/admin/users/{id}/delete(id=${u.id})}" method="post" onsubmit="return confirm('Delete this user?');">
+                            <button type="submit" class="btn-sm btn-sm-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

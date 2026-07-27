@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/fragments/head :: head('Services')}"></head>
+<body class="admin-body">
+
+<aside th:replace="~{admin/fragments/sidebar :: sidebar('services')}"></aside>
+
+<main class="admin-main">
+    <div class="admin-topbar"><h1>Services</h1></div>
+
+    <div class="admin-content">
+        <div class="flash flash-success" th:if="${success}" th:text="${success}"></div>
+
+        <div class="admin-card">
+            <h3 style="margin-bottom:18px;" th:text="${editing != null} ? 'Edit Service' : 'Add Service'">Add Service</h3>
+            <form th:action="${editing != null} ? @{/admin/services/{id}(id=${editing.id})} : @{/admin/services}"
+                  method="post" enctype="multipart/form-data">
+                <div class="form-grid">
+                    <div class="admin-field">
+                        <label>Title</label>
+                        <input type="text" name="title" required th:value="${editing?.title}" placeholder="e.g. Venue Selection" />
+                    </div>
+                    <div class="admin-field">
+                        <label>Photo (optional)</label>
+                        <input type="file" name="photo" accept="image/*" />
+                    </div>
+                    <div class="admin-field full">
+                        <label>Description</label>
+                        <textarea name="description" rows="2" required th:text="${editing?.description}"></textarea>
+                    </div>
+                    <div class="admin-field">
+                        <label>Sort Order</label>
+                        <input type="number" name="sortOrder" th:value="${editing?.sortOrder ?: 0}" />
+                    </div>
+                    <div class="admin-field checkbox">
+                        <input type="checkbox" name="published" value="true" th:checked="${editing == null or editing.published}" />
+                        <label style="margin:0;">Published on site</label>
+                    </div>
+                </div>
+                <div style="display:flex; gap:12px; margin-top:20px;">
+                    <button type="submit" class="btn btn-gold" th:text="${editing != null} ? 'Save Changes' : 'Add Service'">Save</button>
+                    <a th:if="${editing != null}" th:href="@{/admin/services}" class="btn btn-outline-dark">Cancel</a>
+                </div>
+            </form>
+        </div>
+
+        <div class="admin-card">
+            <table class="admin-table">
+                <thead><tr><th>Photo</th><th>Title</th><th>Status</th><th></th></tr></thead>
+                <tbody>
+                <tr th:each="s : ${services}">
+                    <td><img th:if="${s.imagePath}" th:src="@{${s.imagePath}}" class="admin-thumb" /></td>
+                    <td th:text="${s.title}">Title</td>
+                    <td><span th:class="${s.published} ? 'badge badge-green' : 'badge badge-gray'" th:text="${s.published} ? 'Published' : 'Hidden'"></span></td>
+                    <td style="display:flex; gap:8px;">
+                        <a th:href="@{/admin/services/{id}/edit(id=${s.id})}" class="btn-sm btn-sm-ghost">Edit</a>
+                        <form th:action="@{/admin/services/{id}/delete(id=${s.id})}" method="post" onsubmit="return confirm('Delete this service?');">
+                            <button type="submit" class="btn-sm btn-sm-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

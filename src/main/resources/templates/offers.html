@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Offers & Coupons | Shaadi Metrics', 'Current wedding planning offers and coupon codes from Shaadi Metrics.')}"></head>
+<body>
+
+<header th:replace="~{fragments/header :: header}"></header>
+
+<section class="gallery-hero">
+    <div class="container">
+        <div class="eyebrow reveal" style="justify-content:center;color:var(--gold-300);" th:text="#{nav.offers}">Offers</div>
+        <h1 class="reveal" th:text="#{offers.page.title}">Limited-Time Offers &amp; Coupons</h1>
+        <p class="reveal" style="max-width:560px;margin:16px auto 0;color:rgba(253,249,242,0.78);" th:text="#{offers.page.desc}">Description</p>
+    </div>
+</section>
+
+<section>
+    <div class="container">
+        <div class="offer-grid" th:if="${not #lists.isEmpty(offers)}">
+            <div class="offer-card tilt-card reveal" data-tilt-strength="6" th:each="o : ${offers}">
+                <div class="offer-photo" th:style="${o.imagePath} != null ? 'background-image:url(' + @{${o.imagePath}} + ')' : ''"></div>
+                <div class="offer-badge" th:text="${o.discountText}">Flat 10% Off</div>
+                <div class="offer-body">
+                    <h3 th:text="${o.title}">Offer Title</h3>
+                    <p th:text="${o.description}">Description</p>
+                    <div class="offer-code">
+                        <span th:text="#{offers.code.label}">Coupon Code</span>
+                        <b th:text="${o.couponCode}">CODE</b>
+                    </div>
+                    <p class="offer-validity" th:if="${o.validTo}">
+                        <span th:text="#{offers.validtill}">Valid till</span> <span th:text="${#temporals.format(o.validTo, 'dd MMM yyyy')}">date</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <p th:if="${#lists.isEmpty(offers)}" style="text-align:center;color:var(--ink-soft);padding:60px 0;" th:text="#{offers.page.empty}">No active offers right now — check back soon!</p>
+
+        <div style="text-align:center; margin-top:50px;">
+            <a href="#" data-open-modal class="btn btn-gold" th:text="#{nav.book}">Book Free Consultation</a>
+        </div>
+    </div>
+</section>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+</body>
+</html>

@@ -1,0 +1,35 @@
+<aside th:fragment="sidebar(active)" class="admin-sidebar" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <div class="admin-brand">
+        <img th:src="@{/images/site/logo.png}" alt="Shaadi Metrics" />
+        <span>Admin Panel</span>
+    </div>
+
+    <nav class="admin-nav">
+        <a th:href="@{/admin}" th:classappend="${active == 'dashboard'} ? 'active'">📊 Dashboard</a>
+
+        <div class="nav-section" sec:authorize="hasAnyRole('SUPER_ADMIN','LEADS_MANAGER')">Leads</div>
+        <a sec:authorize="hasAnyRole('SUPER_ADMIN','LEADS_MANAGER')" th:href="@{/admin/leads}" th:classappend="${active == 'leads'} ? 'active'">📩 Consultation Leads</a>
+
+        <div class="nav-section" sec:authorize="hasAnyRole('SUPER_ADMIN','CONTENT_MANAGER')">Content</div>
+        <a sec:authorize="hasAnyRole('SUPER_ADMIN','CONTENT_MANAGER')" th:href="@{/admin/gallery}" th:classappend="${active == 'gallery'} ? 'active'">🖼️ Gallery</a>
+        <a sec:authorize="hasAnyRole('SUPER_ADMIN','CONTENT_MANAGER')" th:href="@{/admin/testimonials}" th:classappend="${active == 'testimonials'} ? 'active'">💬 Testimonials</a>
+        <a sec:authorize="hasAnyRole('SUPER_ADMIN','CONTENT_MANAGER')" th:href="@{/admin/services}" th:classappend="${active == 'services'} ? 'active'">✨ Services</a>
+        <a sec:authorize="hasAnyRole('SUPER_ADMIN','CONTENT_MANAGER')" th:href="@{/admin/offers}" th:classappend="${active == 'offers'} ? 'active'">🎟️ Offers &amp; Coupons</a>
+
+        <div class="nav-section" sec:authorize="hasRole('SUPER_ADMIN')">Administration</div>
+        <a sec:authorize="hasRole('SUPER_ADMIN')" th:href="@{/admin/users}" th:classappend="${active == 'users'} ? 'active'">👤 Users &amp; Roles</a>
+
+        <div class="nav-section">&nbsp;</div>
+        <a th:href="@{/}" target="_blank">🌐 View Live Site</a>
+    </nav>
+
+    <div class="admin-user-box">
+        <b sec:authentication="name">username</b>
+        <span sec:authorize="hasRole('SUPER_ADMIN')">Super Admin</span>
+        <span sec:authorize="!hasRole('SUPER_ADMIN') and hasRole('CONTENT_MANAGER')">Content Manager</span>
+        <span sec:authorize="!hasRole('SUPER_ADMIN') and !hasRole('CONTENT_MANAGER') and hasRole('LEADS_MANAGER')">Leads Manager</span>
+        <form th:action="@{/admin/logout}" method="post">
+            <button type="submit">Log out</button>
+        </form>
+    </div>
+</aside>

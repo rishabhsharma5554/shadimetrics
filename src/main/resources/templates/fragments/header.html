@@ -1,0 +1,28 @@
+<header th:fragment="header" class="navbar" id="navbar">
+    <div class="container nav-inner">
+        <a th:href="@{/}" class="brand">
+            <img th:src="@{/images/site/logo.svg}" src="/images/site/logo.svg" alt="Shaadi Metrics" class="logo-img" />
+            <span th:text="#{app.name}">Shaadi Metrics</span>
+        </a>
+
+        <nav class="nav-links">
+            <a th:href="@{/#about}" th:text="#{nav.about}">About</a>
+            <a th:href="@{/#services}" th:text="#{nav.services}">Services</a>
+            <a th:href="@{/#process}" th:text="#{nav.process}">Process</a>
+            <a th:href="@{/gallery}" th:text="#{nav.gallery}">Gallery</a>
+            <a th:href="@{/planner}" th:text="#{nav.planner}">AI Planner</a>
+            <a th:href="@{/#offers}" th:text="#{nav.offers}">Offers</a>
+            <a th:href="@{/#testimonials}" th:text="#{nav.testimonials}">Testimonials</a>
+        </nav>
+
+        <div class="nav-cta">
+            <div class="lang-switch">
+                <a th:href="@{${currentUri}(lang='en')}" th:classappend="${#locale.language == 'en'} ? 'active'">EN</a>
+                <a th:href="@{${currentUri}(lang='hi')}" th:classappend="${#locale.language == 'hi'} ? 'active'">हि</a>
+            </div>
+            <a href="tel:8878778770" class="btn btn-outline-dark" style="padding:10px 20px;">📞 8878778770</a>
+            <a href="#" data-open-modal class="btn btn-gold" style="padding:10px 22px;" th:text="#{nav.book}">Book Free Consultation</a>
+            <button class="nav-toggle" aria-label="Menu"><span></span></button>
+        </div>
+    </div>
+</header>

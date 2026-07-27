@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{admin/fragments/head :: head('Testimonials')}"></head>
+<body class="admin-body">
+
+<aside th:replace="~{admin/fragments/sidebar :: sidebar('testimonials')}"></aside>
+
+<main class="admin-main">
+    <div class="admin-topbar">
+        <h1>Testimonials</h1>
+        <span th:if="${pendingCount != null and pendingCount > 0}" class="badge badge-gold" th:text="${pendingCount} + ' awaiting approval'"></span>
+    </div>
+
+    <div class="admin-content">
+        <div class="flash flash-success" th:if="${success}" th:text="${success}"></div>
+
+        <div class="admin-card">
+            <h3 style="margin-bottom:8px;" th:text="${editing != null} ? 'Edit Testimonial' : 'Add Testimonial / Review'">Add Testimonial</h3>
+            <p sec:authorize="!hasRole('SUPER_ADMIN')" style="font-size:13.5px;color:var(--ink-soft);margin-bottom:18px;">
+                Your submission will be sent to a Super Admin for approval before it appears on the live site.
+            </p>
+            <form th:action="${editing != null} ? @{/admin/testimonials/{id}(id=${editing.id})} : @{/admin/testimonials}"
+                  method="post" enctype="multipart/form-data">
+                <div class="form-grid">
+                    <div class="admin-field">
+                        <label>Couple Names</label>
+                        <input type="text" name="coupleNames" required th:value="${editing?.coupleNames}" placeholder="e.g. Rahul & Priya" />
+                    </div>
+                    <div class="admin-field">
+                        <label>Location</label>
+                        <input type="text" name="location" th:value="${editing?.location}" placeholder="e.g. Indore" />
+                    </div>
+                    <div class="admin-field full">
+                        <label>Quote</label>
+                        <textarea name="quote" rows="3" required th:text="${editing?.quote}"></textarea>
+                    </div>
+                    <div class="admin-field">
+                        <label>Photo (optional)</label>
+                        <input type="file" name="photo" accept="image/*" />
+                    </div>
+                    <div class="admin-field">
+                        <label>Sort Order</label>
+                        <input type="number" name="sortOrder" th:value="${editing?.sortOrder ?: 0}" />
+                    </div>
+                    <div class="admin-field checkbox full">
+                        <input type="checkbox" name="published" value="true" th:checked="${editing == null or editing.published}" />
+                        <label style="margin:0;">Published on site</label>
+                    </div>
+                </div>
+                <div style="display:flex; gap:12px; margin-top:20px;">
+                    <button type="submit" class="btn btn-gold" th:text="${editing != null} ? 'Save Changes' : 'Add Testimonial'">Save</button>
+                    <a th:if="${editing != null}" th:href="@{/admin/testimonials}" class="btn btn-outline-dark">Cancel</a>
+                </div>
+            </form>
+        </div>
+
+        <div class="admin-card">
+            <table class="admin-table">
+                <thead><tr><th>Photo</th><th>Couple</th><th>Location</th><th>Submitted By</th><th>Review Status</th><th>Live?</th><th></th></tr></thead>
+                <tbody>
+                <tr th:each="t : ${testimonials}">
+                    <td><img th:if="${t.photoPath}" th:src="@{${t.photoPath}}" class="admin-thumb" /></td>
+                    <td th:text="${t.coupleNames}">Couple</td>
+                    <td th:text="${t.location}">Location</td>
+                    <td th:text="${t.submittedBy ?: '—'}">staff</td>
+                    <td>
+                        <span th:if="${t.status.name() == 'APPROVED'}" class="badge badge-green">Approved</span>
+                        <span th:if="${t.status.name() == 'PENDING'}" class="badge badge-gold">Pending Review</span>
+                        <span th:if="${t.status.name() == 'REJECTED'}" class="badge badge-red">Rejected</span>
+                    </td>
+                    <td><span th:class="${t.published and t.status.name() == 'APPROVED'} ? 'badge badge-green' : 'badge badge-gray'" th:text="${t.published and t.status.name() == 'APPROVED'} ? 'Live' : 'Hidden'"></span></td>
+                    <td style="display:flex; gap:8px; flex-wrap:wrap;">
+                        <form th:if="${t.status.name() == 'PENDING'}" sec:authorize="hasRole('SUPER_ADMIN')" th:action="@{/admin/testimonials/{id}/approve(id=${t.id})}" method="post">
+                            <button type="submit" class="btn-sm btn-sm-gold">Approve</button>
+                        </form>
+                        <form th:if="${t.status.name() == 'PENDING'}" sec:authorize="hasRole('SUPER_ADMIN')" th:action="@{/admin/testimonials/{id}/reject(id=${t.id})}" method="post">
+                            <button type="submit" class="btn-sm btn-sm-ghost">Reject</button>
+                        </form>
+                        <a th:href="@{/admin/testimonials/{id}/edit(id=${t.id})}" class="btn-sm btn-sm-ghost">Edit</a>
+                        <form th:action="@{/admin/testimonials/{id}/delete(id=${t.id})}" method="post" onsubmit="return confirm('Delete this testimonial?');">
+                            <button type="submit" class="btn-sm btn-sm-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

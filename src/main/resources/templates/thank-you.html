@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Thank You | Shaadi Metrics', 'Thank you for reaching out to Shaadi Metrics — we will be in touch soon.')}"></head>
+<body>
+
+<header th:replace="~{fragments/header :: header}"></header>
+
+<section class="thankyou">
+    <canvas id="hero-canvas" style="opacity:0.5;"></canvas>
+    <div class="container" style="position:relative; z-index:2;">
+        <div class="ring">💍</div>
+        <h1 th:if="${name}"><span th:text="#{thankyou.title}">Thank You</span>, <span style="color:var(--gold-300);" th:text="${name}">Friend</span>!</h1>
+        <h1 th:unless="${name}" th:text="#{thankyou.title}">Thank You!</h1>
+        <p th:text="#{thankyou.desc}">Description</p>
+        <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
+            <a th:href="@{/}" class="btn btn-gold" th:text="#{thankyou.home}">Back to Home</a>
+            <a th:href="@{/gallery}" class="btn btn-outline" th:text="#{thankyou.gallery}">Browse Gallery</a>
+        </div>
+    </div>
+</section>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+</body>
+</html>

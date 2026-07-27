@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Affordable Wedding Planner in Indore & MP | Shaadi Metrics', 'Plan your perfect wedding with precision & passion. Structured planning, transparent budgeting, flawless execution across Indore & Madhya Pradesh.')}"></head>
+<body>
+
+<header th:replace="~{fragments/header :: header}"></header>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+    <div class="hero-bg-photo" style="background-image:url('/images/site/hero-bg.jpg');"></div>
+    <canvas id="hero-canvas"></canvas>
+
+    <div class="container hero-inner">
+        <span class="hero-badge" th:text="#{hero.badge}">✦ Where Emotions Meet Metrics ✦</span>
+        <h1 th:utext="#{hero.title}">Plan Your <em>Perfect Wedding</em> with Precision &amp; Passion</h1>
+        <p class="hero-sub" th:text="#{hero.sub}">Hero subtext</p>
+
+        <div class="hero-actions">
+            <a href="#" data-open-modal class="btn btn-gold" th:text="#{hero.cta.consult}">Book Free Consultation</a>
+            <a th:href="@{/gallery}" class="btn btn-outline" th:text="#{hero.cta.gallery}">View Our Gallery</a>
+        </div>
+
+        <div class="hero-stats">
+            <div class="hero-stat"><b><span th:data-count="${heroStats.weddingsPlanned}" data-suffix="+" th:text="${heroStats.weddingsPlanned}">0</span></b><span th:text="#{hero.stat.weddings}">Weddings Planned</span></div>
+            <div class="hero-stat"><b><span th:data-count="${heroStats.onTimeExecution}" data-suffix="%" th:text="${heroStats.onTimeExecution}">0</span></b><span th:text="#{hero.stat.ontime}">On-time Execution</span></div>
+            <div class="hero-stat"><b><span th:text="${heroStats.transparentBudgeting}">100</span>%</b><span th:text="#{hero.stat.budget}">Transparent Budgeting</span></div>
+        </div>
+    </div>
+
+    <div class="scroll-cue"><span th:text="#{hero.scroll}">Scroll</span><span class="stick"></span></div>
+</section>
+
+<!-- ============ ABOUT / WHY ============ -->
+<section id="about">
+    <div class="container">
+        <div class="about-grid">
+            <div class="about-visual reveal">
+                <div class="frame">
+                    <img src="/images/site/about.jpg" alt="Shaadi Metrics wedding planning" />
+                </div>
+                <div class="badge-float">
+                    <span style="font-size:26px;">💍</span>
+                    <div><b th:text="#{about.badge.count}">1200+</b><span th:text="#{about.badge.label}">Weddings Crafted</span></div>
+                </div>
+            </div>
+
+            <div>
+                <div class="eyebrow reveal" th:text="#{about.eyebrow}">Why Shaadi Metrics</div>
+                <h2 class="reveal" th:text="#{about.title}">Where Emotions Meet Metrics</h2>
+                <p class="reveal" style="margin-top:16px;" th:text="#{about.desc}">About description</p>
+
+                <div class="feature-list">
+                    <div class="feature-item tilt-card reveal reveal-delay-1" data-tilt-strength="6">
+                        <div class="feature-icon">📋</div>
+                        <div><h3 th:text="#{feature.structured.title}">Structured Planning</h3><p th:text="#{feature.structured.desc}">Description</p></div>
+                    </div>
+                    <div class="feature-item tilt-card reveal reveal-delay-2" data-tilt-strength="6">
+                        <div class="feature-icon">💰</div>
+                        <div><h3 th:text="#{feature.budget.title}">Transparent Budgeting</h3><p th:text="#{feature.budget.desc}">Description</p></div>
+                    </div>
+                    <div class="feature-item tilt-card reveal reveal-delay-3" data-tilt-strength="6">
+                        <div class="feature-icon">✨</div>
+                        <div><h3 th:text="#{feature.execution.title}">Flawless Execution</h3><p th:text="#{feature.execution.desc}">Description</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ SERVICES ============ -->
+<section id="services" class="section-alt">
+    <div class="container">
+        <div class="section-head">
+            <div class="eyebrow reveal" th:text="#{services.eyebrow}">Our Services</div>
+            <h2 class="reveal" th:text="#{services.title}">Everything Your Wedding Deserves</h2>
+            <p class="reveal" th:text="#{services.desc}">Description</p>
+        </div>
+
+        <div class="service-grid">
+            <div class="service-card tilt-card reveal" data-tilt-strength="5" th:each="s,iter : ${services}">
+                <img th:src="@{${s.imagePath}}" th:alt="${s.title}" />
+                <div class="content">
+                    <span class="num" th:text="${#numbers.formatInteger(iter.index + 1, 2)}">01</span>
+                    <h3 th:text="${s.title}">Service</h3>
+                    <p th:text="${s.description}">Description</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align:center; margin-top:50px;">
+            <a href="#" data-open-modal class="btn btn-outline-dark" th:text="#{services.cta}">Call Now for a Free Consultation</a>
+        </div>
+    </div>
+</section>
+
+<!-- ============ PROCESS ============ -->
+<section id="process">
+    <div class="container">
+        <div class="section-head">
+            <div class="eyebrow reveal" th:text="#{process.eyebrow}">How We Work</div>
+            <h2 class="reveal" th:text="#{process.title}">Your Journey with Us</h2>
+            <p class="reveal" th:text="#{process.desc}">Description</p>
+        </div>
+
+        <div class="process-track">
+            <div class="process-step reveal">
+                <span class="step-no">1</span>
+                <div class="process-circle"><img src="/images/site/icon-consultation.png" alt="Consultation" /></div>
+                <h3 th:text="#{process.step1.title}">Consultation</h3><p th:text="#{process.step1.desc}">Description</p>
+            </div>
+            <div class="process-step reveal reveal-delay-1">
+                <span class="step-no">2</span>
+                <div class="process-circle"><img src="/images/site/icon-budget.png" alt="Budget Planning" /></div>
+                <h3 th:text="#{process.step2.title}">Budget Planning</h3><p th:text="#{process.step2.desc}">Description</p>
+            </div>
+            <div class="process-step reveal reveal-delay-2">
+                <span class="step-no">3</span>
+                <div class="process-circle"><img src="/images/site/icon-vendor.png" alt="Vendor Coordination" /></div>
+                <h3 th:text="#{process.step3.title}">Vendor Coordination</h3><p th:text="#{process.step3.desc}">Description</p>
+            </div>
+            <div class="process-step reveal reveal-delay-3">
+                <span class="step-no">4</span>
+                <div class="process-circle"><img src="/images/site/icon-execution.png" alt="Execution" /></div>
+                <h3 th:text="#{process.step4.title}">Execution</h3><p th:text="#{process.step4.desc}">Description</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ 3D GALLERY SHOWCASE ============ -->
+<section class="section-alt gallery3d-section">
+    <div class="container">
+        <div class="section-head">
+            <div class="eyebrow reveal" th:text="#{gallery3d.eyebrow}">Weddings We've Crafted</div>
+            <h2 class="reveal" th:text="#{gallery3d.title}">1200+ Weddings, Crafted with Perfection</h2>
+            <p class="reveal" th:text="#{gallery3d.desc}">Description</p>
+        </div>
+    </div>
+
+    <div class="gallery3d-stage">
+        <canvas id="gallery3d-canvas"></canvas>
+        <div class="gallery3d-hint" th:text="#{gallery3d.hint}">🖱️ Drag to rotate · Click a photo to open</div>
+    </div>
+
+    <script th:inline="javascript">
+        window.__featuredGalleryImages = /*[[${featuredGallery.![imagePath]}]]*/ [];
+    </script>
+
+    <div class="container">
+        <div style="text-align:center; margin-top:30px;">
+            <a th:href="@{/gallery}" class="btn btn-gold" th:text="#{gallery3d.cta}">View Full Gallery</a>
+        </div>
+    </div>
+</section>
+
+<!-- ============ BEFORE / AFTER ============ -->
+<section>
+    <div class="container">
+        <div class="section-head">
+            <div class="eyebrow reveal" th:text="#{beforeafter.eyebrow}">Before &amp; After</div>
+            <h2 class="reveal" th:text="#{beforeafter.title}">Transformations That Speak for Themselves</h2>
+            <p class="reveal" th:text="#{beforeafter.desc}">Description</p>
+        </div>
+
+        <div class="compare-wrap reveal">
+            <span class="compare-label before" th:text="#{beforeafter.before}">Before</span>
+            <span class="compare-label after" th:text="#{beforeafter.after}">After</span>
+            <img src="/images/site/before.png" alt="Venue before setup" />
+            <img class="compare-after" src="/images/site/after.png" alt="Venue after setup" />
+            <div class="compare-handle"></div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ TESTIMONIALS ============ -->
+<section id="testimonials" class="section-alt">
+    <div class="container">
+        <div class="section-head">
+            <div class="eyebrow reveal" th:text="#{testimonials.eyebrow}">Love Stories</div>
+            <h2 class="reveal" th:text="#{testimonials.title}">Heartfelt Reviews from Real Couples</h2>
+            <p class="reveal" th:text="#{testimonials.desc}">Description</p>
+        </div>
+
+        <div class="testimonial-track">
+            <div class="testimonial-card tilt-card reveal" data-tilt-strength="4" th:each="t : ${testimonials}">
+                <div class="quote-mark">"</div>
+                <p class="quote" th:text="${t.quote}">Quote</p>
+                <div class="testimonial-who">
+                    <img th:if="${t.photoPath}" th:src="@{${t.photoPath}}" th:alt="${t.coupleNames}" />
+                    <div><b th:text="${t.coupleNames}">Couple</b><span th:text="${t.location}">Location</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ SMART BUDGETING ============ -->
+<section class="budget-section">
+    <div class="container budget-grid">
+        <div>
+            <div class="eyebrow reveal" th:text="#{budget.eyebrow}">Smart Budgeting</div>
+            <h2 class="reveal" th:text="#{budget.title}">Your Budget, Our Commitment</h2>
+            <p class="reveal" style="margin-top:16px;color:rgba(253,249,242,0.8);" th:text="#{budget.desc}">Description</p>
+
+            <ul class="budget-list">
+                <li class="reveal reveal-delay-1"><span class="tick">✓</span> <span th:text="#{budget.list1}">Customized Packages for Every Budget</span></li>
+                <li class="reveal reveal-delay-2"><span class="tick">✓</span> <span th:text="#{budget.list2}">No Hidden Charges, Ever</span></li>
+                <li class="reveal reveal-delay-3"><span class="tick">✓</span> <span th:text="#{budget.list3}">Real-Time Budget Tracking Dashboard</span></li>
+            </ul>
+
+            <a href="#" data-open-modal class="btn btn-gold reveal" th:text="#{budget.cta}">Get Your Free Budget Plan</a>
+        </div>
+
+        <div class="budget-card reveal">
+            <h3 style="color:var(--ivory);margin-bottom:20px;" th:text="#{budget.sample.title}">Sample Wedding Budget</h3>
+            <div class="budget-row"><span>Venue &amp; Decoration</span><b>₹4,80,000</b></div>
+            <div class="budget-row"><span>Catering (per plate x 400)</span><b>₹3,20,000</b></div>
+            <div class="budget-row"><span>Photography &amp; Films</span><b>₹1,50,000</b></div>
+            <div class="budget-row"><span>Entertainment</span><b>₹1,10,000</b></div>
+            <div class="budget-row"><span>Invitations &amp; Stationery</span><b>₹45,000</b></div>
+            <div class="budget-total"><span th:text="#{budget.sample.total}">Total Estimate</span><span>₹11,05,000</span></div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ TRUST / MAP ============ -->
+<section>
+    <div class="container map-wrap">
+        <div class="map-visual reveal">
+            <img src="/images/site/mp-map.png" alt="Serving all over Madhya Pradesh" />
+            <div class="map-pin" style="top:38%; left:44%;"></div>
+            <div class="map-pin" style="top:55%; left:60%;"></div>
+            <div class="map-pin" style="top:30%; left:62%;"></div>
+        </div>
+        <div>
+            <div class="eyebrow reveal" th:text="#{trust.eyebrow}">Trusted Across MP</div>
+            <h2 class="reveal" th:text="#{trust.title}">Proudly Serving Families Across Madhya Pradesh</h2>
+            <p class="reveal" style="margin-top:16px;" th:text="#{trust.desc}">Description</p>
+
+            <div class="stat-row">
+                <div class="stat-box reveal"><b><span th:data-count="${trustStats.weddingsPlanned}" data-suffix="+" th:text="${trustStats.weddingsPlanned}">0</span></b><span th:text="#{trust.stat.weddings}">Weddings Planned</span></div>
+                <div class="stat-box reveal reveal-delay-1"><b><span th:data-count="${trustStats.onTimeExecution}" data-suffix="%" th:text="${trustStats.onTimeExecution}">0</span></b><span th:text="#{trust.stat.ontime}">On-time Execution</span></div>
+                <div class="stat-box reveal reveal-delay-2"><b><span th:data-count="${trustStats.citiesServed}" data-suffix="+" th:text="${trustStats.citiesServed}">0</span></b><span th:text="#{trust.stat.cities}">Cities Served</span></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ OFFERS / COUPONS ============ -->
+<section id="offers" class="section-alt" th:if="${not #lists.isEmpty(offers)}">
+    <div class="container">
+        <div class="section-head">
+            <div class="eyebrow reveal" th:text="#{offers.eyebrow}">Limited-Time Offers</div>
+            <h2 class="reveal" th:text="#{offers.title}">Save More on Your Big Day</h2>
+            <p class="reveal" th:text="#{offers.desc}">Description</p>
+        </div>
+
+        <div class="offer-grid">
+            <div class="offer-card tilt-card reveal" data-tilt-strength="6" th:each="o : ${offers}">
+                <div class="offer-photo" th:style="${o.imagePath} != null ? 'background-image:url(' + @{${o.imagePath}} + ')' : ''"></div>
+                <div class="offer-badge" th:text="${o.discountText}">Flat 10% Off</div>
+                <div class="offer-body">
+                    <h3 th:text="${o.title}">Offer Title</h3>
+                    <p th:text="${o.description}">Description</p>
+                    <div class="offer-code">
+                        <span th:text="#{offers.code.label}">Coupon Code</span>
+                        <b th:text="${o.couponCode}">CODE</b>
+                    </div>
+                    <p class="offer-validity" th:if="${o.validTo}">
+                        <span th:text="#{offers.validtill}">Valid till</span> <span th:text="${#temporals.format(o.validTo, 'dd MMM yyyy')}">date</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="cta-section">
+    <div class="cta-glow"></div>
+    <div class="cta-glow two"></div>
+    <div class="container" style="position:relative;">
+        <h2 th:text="#{cta.title}">Let's Plan Your Wedding the Smart Way</h2>
+        <p th:text="#{cta.desc}">Description</p>
+        <a href="#" data-open-modal class="btn btn-gold" th:text="#{cta.button}">Book Free Consultation</a>
+    </div>
+</section>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+</body>
+</html>

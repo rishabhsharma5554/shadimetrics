@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Your Wedding Plan | Shaadi Metrics', 'Your personalized wedding budget and service plan from Shaadi Metrics.')}"></head>
+<body>
+
+<header th:replace="~{fragments/header :: header}"></header>
+
+<section class="planner-hero" style="padding-bottom:40px;">
+    <div class="container">
+        <div class="eyebrow reveal" style="justify-content:center;color:var(--gold-300);" th:text="#{planner.eyebrow}">Your AI Plan</div>
+        <h1 class="reveal"><span th:text="#{planner.result.title}">Thank You</span>, <span style="color:var(--gold-300);" th:text="${name}">Friend</span></h1>
+    </div>
+</section>
+
+<section style="padding-top:50px;">
+    <div class="container" style="max-width:820px;">
+
+        <div class="planner-result-hero reveal">
+            <p class="planner-headline" th:text="${recommendation.headline}">Headline</p>
+        </div>
+
+        <div class="budget-card reveal" style="background:var(--maroon-950); margin:34px 0;">
+            <h3 style="color:var(--ivory);margin-bottom:20px;" th:text="#{planner.result.budget.title}">Suggested Budget Breakdown</h3>
+            <div class="budget-row" th:each="line : ${recommendation.lines}">
+                <span th:text="${line.label}">Category</span>
+                <b th:text="'₹' + ${#numbers.formatInteger(line.amount, 0, 'COMMA')}">₹0</b>
+            </div>
+            <div class="budget-total">
+                <span th:text="#{budget.sample.total}">Total Estimate</span>
+                <span th:text="'₹' + ${#numbers.formatInteger(recommendation.totalBudget, 0, 'COMMA')}">₹0</span>
+            </div>
+        </div>
+
+        <div class="offer-callout reveal" th:if="${not #lists.isEmpty(offers)}">
+            <span style="font-size:34px;">🎟️</span>
+            <div>
+                <b th:text="${offers[0].title}">Offer</b>
+                <p style="margin:4px 0 0;font-size:14px;" th:text="${offers[0].description} + ' Use code ' + ${offers[0].couponCode} + ' when you book.'">Description</p>
+            </div>
+        </div>
+
+        <h3 class="reveal" style="margin:36px 0 20px;" th:text="#{planner.result.services.title}">Services We'd Recommend</h3>
+        <div class="service-grid" style="margin-bottom:20px;">
+            <div class="service-card tilt-card reveal" style="height:220px;" data-tilt-strength="5" th:each="s : ${services}">
+                <img th:src="@{${s.imagePath}}" th:alt="${s.title}" />
+                <div class="content"><h3 th:text="${s.title}">Service</h3></div>
+            </div>
+        </div>
+
+        <div class="plan-cta-card reveal">
+            <h3 style="margin-bottom:10px;" th:text="#{planner.result.next.title}">Ready for the next step?</h3>
+            <p style="margin-bottom:22px;" th:text="#{planner.result.next.desc}">Description</p>
+            <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap;">
+                <a href="tel:8878778770" class="btn btn-gold" th:text="'📞 ' + #{planner.result.call}">Call Us Now</a>
+                <a href="https://wa.me/918878778770?text=Hi%2C%20I%20just%20used%20the%20AI%20Wedding%20Planner" target="_blank" rel="noopener" class="btn btn-outline-dark" th:text="'💬 ' + #{planner.result.whatsapp}">WhatsApp Us</a>
+                <a th:href="@{/gallery}" class="btn btn-outline-dark" th:text="#{planner.result.gallery}">View Gallery</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+</body>
+</html>

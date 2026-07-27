@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/fragments/head :: head('Offers & Coupons')}"></head>
+<body class="admin-body">
+
+<aside th:replace="~{admin/fragments/sidebar :: sidebar('offers')}"></aside>
+
+<main class="admin-main">
+    <div class="admin-topbar"><h1>Offers &amp; Coupons</h1></div>
+
+    <div class="admin-content">
+        <div class="flash flash-success" th:if="${success}" th:text="${success}"></div>
+
+        <div class="admin-card">
+            <h3 style="margin-bottom:18px;" th:text="${editing != null} ? 'Edit Offer' : 'Create Offer'">Create Offer</h3>
+            <form th:action="${editing != null} ? @{/admin/offers/{id}(id=${editing.id})} : @{/admin/offers}"
+                  method="post" enctype="multipart/form-data">
+                <div class="form-grid">
+                    <div class="admin-field">
+                        <label>Title</label>
+                        <input type="text" name="title" required th:value="${editing?.title}" placeholder="e.g. Early Bird Booking" />
+                    </div>
+                    <div class="admin-field">
+                        <label>Coupon Code</label>
+                        <input type="text" name="couponCode" required th:value="${editing?.couponCode}" placeholder="e.g. EARLYBIRD10" style="text-transform:uppercase;" />
+                    </div>
+                    <div class="admin-field full">
+                        <label>Description</label>
+                        <textarea name="description" rows="2" required th:text="${editing?.description}"></textarea>
+                    </div>
+                    <div class="admin-field">
+                        <label>Discount Badge Text</label>
+                        <input type="text" name="discountText" required th:value="${editing?.discountText}" placeholder="e.g. Flat 10% Off" />
+                    </div>
+                    <div class="admin-field">
+                        <label>Photo (optional)</label>
+                        <input type="file" name="photo" accept="image/*" />
+                    </div>
+                    <div class="admin-field">
+                        <label>Valid From</label>
+                        <input type="date" name="validFrom" th:value="${editing?.validFrom}" />
+                    </div>
+                    <div class="admin-field">
+                        <label>Valid To</label>
+                        <input type="date" name="validTo" th:value="${editing?.validTo}" />
+                    </div>
+                    <div class="admin-field checkbox full">
+                        <input type="checkbox" name="active" value="true" th:checked="${editing == null or editing.active}" />
+                        <label style="margin:0;">Active</label>
+                    </div>
+                </div>
+                <div style="display:flex; gap:12px; margin-top:20px;">
+                    <button type="submit" class="btn btn-gold" th:text="${editing != null} ? 'Save Changes' : 'Create Offer'">Save</button>
+                    <a th:if="${editing != null}" th:href="@{/admin/offers}" class="btn btn-outline-dark">Cancel</a>
+                </div>
+            </form>
+        </div>
+
+        <div class="admin-card">
+            <table class="admin-table">
+                <thead><tr><th>Offer</th><th>Code</th><th>Valid</th><th>Status</th><th></th></tr></thead>
+                <tbody>
+                <tr th:each="o : ${offers}">
+                    <td><b th:text="${o.title}">Title</b><br/><span style="font-size:12.5px;color:var(--ink-soft);" th:text="${o.discountText}"></span></td>
+                    <td><code th:text="${o.couponCode}">CODE</code></td>
+                    <td style="font-size:13px;">
+                        <span th:text="${o.validFrom != null ? #temporals.format(o.validFrom, 'dd MMM yyyy') : '—'}"></span>
+                        →
+                        <span th:text="${o.validTo != null ? #temporals.format(o.validTo, 'dd MMM yyyy') : 'ongoing'}"></span>
+                    </td>
+                    <td>
+                        <span th:if="${o.currentlyValid}" class="badge badge-green">Live</span>
+                        <span th:unless="${o.currentlyValid}" class="badge badge-gray" th:text="${o.active} ? 'Scheduled/Expired' : 'Inactive'"></span>
+                    </td>
+                    <td style="display:flex; gap:8px;">
+                        <a th:href="@{/admin/offers/{id}/edit(id=${o.id})}" class="btn-sm btn-sm-ghost">Edit</a>
+                        <form th:action="@{/admin/offers/{id}/delete(id=${o.id})}" method="post" onsubmit="return confirm('Delete this offer?');">
+                            <button type="submit" class="btn-sm btn-sm-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

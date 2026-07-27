@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/fragments/head :: head('Access Denied')}"></head>
+<body>
+<div class="login-wrap">
+    <div class="login-card" style="text-align:center;">
+        <div style="font-size:48px; margin-bottom:16px;">🚫</div>
+        <h1>Access Denied</h1>
+        <p class="hint">Your account doesn't have permission to view that page. Ask a Super Admin to adjust your role if you believe this is a mistake.</p>
+        <a th:href="@{/admin}" class="btn btn-gold btn-block">Back to Dashboard</a>
+    </div>
+</div>
+</body>
+</html>

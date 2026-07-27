@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{admin/fragments/head :: head('Dashboard')}"></head>
+<body class="admin-body">
+
+<aside th:replace="~{admin/fragments/sidebar :: sidebar('dashboard')}"></aside>
+
+<main class="admin-main">
+    <div class="admin-topbar">
+        <h1>Dashboard</h1>
+        <a th:href="@{/}" target="_blank" class="btn-sm btn-sm-ghost">View Live Site ↗</a>
+    </div>
+
+    <div class="admin-content">
+        <div class="admin-stat-grid">
+            <div class="admin-stat"><b th:text="${galleryCount}">0</b><span>Gallery Photos</span></div>
+            <div class="admin-stat"><b th:text="${testimonialCount}">0</b><span>Testimonials</span></div>
+            <div class="admin-stat"><b th:text="${activeOfferCount}">0</b><span>Active Offers</span></div>
+            <div class="admin-stat"><b th:text="${newLeadCount}">0</b><span>New Leads</span></div>
+        </div>
+
+        <div class="admin-card" th:if="${pendingReviewCount != null and pendingReviewCount > 0}" sec:authorize="hasRole('SUPER_ADMIN')" style="display:flex;align-items:center;justify-content:space-between;">
+            <div>
+                <b style="font-family:var(--font-display);font-size:19px;color:var(--maroon-900);" th:text="${pendingReviewCount} + ' review(s) awaiting your approval'"></b>
+                <p style="margin-top:4px;">Submitted by your team — approve to publish them on the live site.</p>
+            </div>
+            <a th:href="@{/admin/testimonials}" class="btn-sm btn-sm-gold">Review Now →</a>
+        </div>
+
+        <div class="admin-card">
+            <h3 style="margin-bottom:18px;">Recent Consultation Requests</h3>
+            <table class="admin-table">
+                <thead><tr><th>Name</th><th>Phone</th><th>Wedding Date</th><th>Status</th><th>Received</th></tr></thead>
+                <tbody>
+                <tr th:each="lead : ${recentLeads}">
+                    <td th:text="${lead.name}">Name</td>
+                    <td th:text="${lead.phone}">Phone</td>
+                    <td th:text="${lead.weddingDate ?: '—'}">Date</td>
+                    <td><span class="badge badge-gold" th:text="${lead.status}">NEW</span></td>
+                    <td th:text="${#temporals.format(lead.createdAt, 'dd MMM, HH:mm')}">Date</td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(recentLeads)}"><td colspan="5" style="text-align:center;color:var(--ink-soft);">No consultation requests yet.</td></tr>
+                </tbody>
+            </table>
+            <div style="margin-top:18px;" sec:authorize="hasAnyRole('SUPER_ADMIN','LEADS_MANAGER')">
+                <a th:href="@{/admin/leads}" class="btn-sm btn-sm-gold">View All Leads →</a>
+            </div>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

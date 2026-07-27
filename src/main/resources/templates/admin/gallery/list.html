@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/fragments/head :: head('Gallery')}"></head>
+<body class="admin-body">
+
+<aside th:replace="~{admin/fragments/sidebar :: sidebar('gallery')}"></aside>
+
+<main class="admin-main">
+    <div class="admin-topbar">
+        <h1>Gallery (<span th:text="${#lists.size(images)}">0</span> photos)</h1>
+        <a th:href="@{/admin/gallery/new}" class="btn-sm btn-sm-gold">+ Add Photo</a>
+    </div>
+
+    <div class="admin-content">
+        <div class="flash flash-success" th:if="${success}" th:text="${success}"></div>
+
+        <div class="category-tabs">
+            <a th:href="@{/admin/gallery}" th:classappend="${selectedCategory == null} ? 'active'">All</a>
+            <a th:each="cat : ${categories}"
+               th:href="@{/admin/gallery(category=${cat.name()})}"
+               th:classappend="${selectedCategory == cat.name()} ? 'active'"
+               th:text="${cat.label}">Category</a>
+        </div>
+
+        <div class="gallery-admin-grid">
+            <div class="gallery-admin-item" th:each="img : ${images}">
+                <img th:src="@{${img.imagePath}}" th:alt="${img.caption}" />
+                <div class="meta">
+                    <span th:text="${img.category.label}">Category</span>
+                    <span th:if="${img.featured}" class="badge badge-gold" style="padding:2px 8px;">★</span>
+                </div>
+                <div class="meta" style="padding-top:0;">
+                    <a th:href="@{/admin/gallery/{id}/edit(id=${img.id})}" class="btn-sm btn-sm-ghost" style="flex:1; justify-content:center;">Edit</a>
+                    <form th:action="@{/admin/gallery/{id}/delete(id=${img.id})}" method="post" onsubmit="return confirm('Remove this photo?');">
+                        <button type="submit" class="btn-sm btn-sm-danger">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <p th:if="${#lists.isEmpty(images)}" style="text-align:center;color:var(--ink-soft);padding:40px 0;">No photos in this category yet.</p>
+    </div>
+</main>
+
+</body>
+</html>

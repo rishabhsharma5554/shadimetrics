@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/fragments/head :: head('Consultation Leads')}"></head>
+<body class="admin-body">
+
+<aside th:replace="~{admin/fragments/sidebar :: sidebar('leads')}"></aside>
+
+<main class="admin-main">
+    <div class="admin-topbar"><h1>Consultation Leads (<span th:text="${#lists.size(leads)}">0</span>)</h1></div>
+
+    <div class="admin-content">
+        <div class="flash flash-success" th:if="${success}" th:text="${success}"></div>
+
+        <div class="admin-card">
+            <table class="admin-table">
+                <thead><tr><th>Received</th><th>Source</th><th>Name</th><th>Phone</th><th>Details</th><th>Call Time</th><th>Status</th><th></th></tr></thead>
+                <tbody>
+                <tr th:each="lead : ${leads}">
+                    <td style="white-space:nowrap;" th:text="${#temporals.format(lead.createdAt, 'dd MMM yyyy, HH:mm')}">Date</td>
+                    <td><span th:class="${lead.source.name() == 'AI_PLANNER'} ? 'badge badge-gold' : 'badge badge-gray'" th:text="${lead.source.name() == 'AI_PLANNER'} ? 'AI Planner' : 'Consultation'"></span></td>
+                    <td th:text="${lead.name}">Name</td>
+                    <td><a th:href="'tel:' + ${lead.phone}" th:text="${lead.phone}">Phone</a></td>
+                    <td style="max-width:260px; font-size:13px;">
+                        <div th:if="${lead.weddingDate}">📅 <span th:text="${lead.weddingDate}"></span></div>
+                        <div th:if="${lead.guestCount}">👥 <span th:text="${lead.guestCount}"></span> guests (approx.)</div>
+                        <div th:if="${lead.preferredCity}">📍 <span th:text="${lead.preferredCity}"></span></div>
+                        <div th:if="${lead.message}" th:text="${lead.message}"></div>
+                    </td>
+                    <td th:text="${lead.preferredCallTime ?: '—'}">Call Time</td>
+                    <td>
+                        <form th:action="@{/admin/leads/{id}/status(id=${lead.id})}" method="post">
+                            <select name="status" onchange="this.form.submit()" style="padding:6px 10px;border-radius:8px;border:1px solid rgba(44,8,18,0.15);">
+                                <option th:each="s : ${statuses}" th:value="${s}" th:text="${s}" th:selected="${s == lead.status}"></option>
+                            </select>
+                        </form>
+                    </td>
+                    <td>
+                        <form th:action="@{/admin/leads/{id}/delete(id=${lead.id})}" method="post" onsubmit="return confirm('Delete this lead?');">
+                            <button type="submit" class="btn-sm btn-sm-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(leads)}"><td colspan="8" style="text-align:center;color:var(--ink-soft);">No consultation requests yet.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+</body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/fragments/head :: head('Admin Login')}"></head>
+<body>
+<div class="login-wrap">
+    <div class="login-card">
+        <div class="brand-row">
+            <img th:src="@{/images/site/logo.png}" alt="Shaadi Metrics" />
+            <b style="font-family:var(--font-display); font-size:20px;">Shaadi Metrics</b>
+        </div>
+        <h1>Admin Sign In</h1>
+        <p class="hint">Manage gallery, offers, leads and your team from one place.</p>
+
+        <div class="flash flash-error" th:if="${param.error}">Invalid username or password.</div>
+        <div class="flash flash-success" th:if="${param.logout}">You have been logged out.</div>
+
+        <form th:action="@{/admin/login}" method="post">
+            <div class="admin-field" style="margin-bottom:16px;">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required autofocus />
+            </div>
+            <div class="admin-field" style="margin-bottom:24px;">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required />
+            </div>
+            <button type="submit" class="btn btn-gold btn-block">Sign In</button>
+        </form>
+    </div>
+</div>
+</body>
+</html>

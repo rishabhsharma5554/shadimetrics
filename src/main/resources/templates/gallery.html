@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/head :: head('Wedding Gallery | Shaadi Metrics', 'Explore real weddings crafted by Shaadi Metrics across Indore & Madhya Pradesh — mandaps, sangeet nights, baraats, and more.')}"></head>
+<body>
+
+<header th:replace="~{fragments/header :: header}"></header>
+
+<section class="gallery-hero">
+    <div class="container">
+        <div class="eyebrow reveal" style="justify-content:center;color:var(--gold-300);" th:text="#{nav.gallery}">Gallery</div>
+        <h1 class="reveal" th:text="${totalCount} + ' ' + #{gallery.page.title}">Real Wedding Photos</h1>
+        <p class="reveal" style="max-width:560px;margin:16px auto 0;color:rgba(253,249,242,0.78);" th:text="#{gallery.page.desc}">Description</p>
+
+        <div class="gallery-filters">
+            <button class="filter-btn active" data-filter="all" th:text="#{gallery.filter.all}">All</button>
+            <button class="filter-btn" th:each="cat : ${categories}" th:attr="data-filter=${cat.slug}" th:text="${cat.label}">Category</button>
+        </div>
+    </div>
+</section>
+
+<section style="padding-top:0;">
+    <div class="container">
+        <div class="masonry">
+            <th:block th:each="cat : ${categories}">
+                <div class="masonry-item reveal" th:each="img : ${byCategory.get(cat)}" th:attr="data-category=${cat.slug}">
+                    <img th:src="@{${img.imagePath}}" th:alt="${img.caption ?: cat.label}" loading="lazy" />
+                    <span class="tag" th:text="${cat.label}">Category</span>
+                </div>
+            </th:block>
+        </div>
+    </div>
+</section>
+
+<section class="cta-section" style="padding:80px 0;">
+    <div class="cta-glow"></div>
+    <div class="container" style="position:relative;">
+        <h2 style="font-size:clamp(26px,4vw,38px);" th:text="#{gallery.cta.title}">Loved what you saw?</h2>
+        <p th:text="#{gallery.cta.desc}">Description</p>
+        <a href="#" data-open-modal class="btn btn-gold" th:text="#{nav.book}">Book Free Consultation</a>
+    </div>
+</section>
+
+<footer th:replace="~{fragments/footer :: footer}"></footer>
+
+</body>
+</html>
