@@ -310,7 +310,7 @@ Contributions are welcome! Please follow these steps:
 ## 📞 Support & Contact
 
 For questions, issues, or suggestions:
-- **Email**: rishabh.sharma@tech5-sa.com
+- **Email**: rishabhsharma.5554@gmail.com
 - **GitHub Issues**: [Open an Issue](https://github.com/RishabhSharma-tech/shadimetrics/issues)
 
 ## 🙏 Acknowledgments
